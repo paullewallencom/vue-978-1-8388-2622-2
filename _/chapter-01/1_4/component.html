@@ -1,0 +1,56 @@
+<html>
+
+<head>
+  <script src="https://unpkg.com/vue@next"></script>
+</head>
+
+<body>
+  <div id="app">
+  </div>
+  <script>
+    const {
+      defineComponent,
+      createApp,
+    } = Vue;
+
+    const nameInput = defineComponent({
+      name: 'NameInput',
+      props: {
+        modelValue: String,
+      },
+      inheritAttrs: false,
+      template: `
+      <label>
+        <input
+          v-bind="{
+            ...$attrs,
+          }"
+          :value="modelValue"
+          type="text"
+          @change="(event) => $emit('update:modelValue', event.target.value)"
+        />
+      </label>
+      `
+    });
+
+
+    const appComponent = defineComponent({
+      data: () => ({
+        name: '',
+      }),
+      template: `
+      <name-input
+        v-model="name"
+        style="border:0; border-bottom: 2px solid red;"
+        data-test="name-input"
+      />`
+    });
+
+    const app = createApp(appComponent);
+
+    app.component('NameInput', nameInput);
+    app.mount('#app');
+  </script>
+</body>
+
+</html>
